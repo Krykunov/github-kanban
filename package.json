@@ -6,8 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "format": "prettier . --ignore-path .gitignore --write",
+    "fix-style": "npm run format && npm run lint",
+    "preview": "vite preview",
+    "prepare": "husky && husky install",
+    "start": "vite",
+    "lint": "eslint . --fix"
   },
   "husky": {
     "hooks": {

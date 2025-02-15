@@ -1,5 +1,5 @@
 import { Container } from '@chakra-ui/react';
-import InputForm from './components/InputForm';
+// import InputForm from './components/InputForm';
 import IssuesBoard from './components/IssuesBoard';
 import './App.css';
 
