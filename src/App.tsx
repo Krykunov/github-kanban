@@ -6,7 +6,7 @@ import './App.css';
 function App() {
   return (
     <Container fluid py={8}>
-      <InputForm />
+      {/* <InputForm /> */}
       <IssuesBoard />
     </Container>
   );
