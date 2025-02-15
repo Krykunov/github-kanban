@@ -5,13 +5,13 @@ export type Issue = {
   created_at: string;
   user: { login: string };
   comments: number;
-  status: Status;
+  state: Status;
 };
 
 export enum Status {
-  ToDo = 'ToDo',
+  Open = 'open',
   InProgress = 'In Progress',
-  Done = 'Done',
+  Done = 'closed',
 }
 
-export type IssuesByStatus = Record<Status, Issue[]>;
+export type IssuesBystate = Record<Status, Issue[]>;
