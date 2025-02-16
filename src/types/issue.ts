@@ -14,4 +14,4 @@ export enum Status {
   Done = 'closed',
 }
 
-export type IssuesBystate = Record<Status, Issue[]>;
+export type IssuesByStatus = Record<Status, Issue[]>;
