@@ -1,19 +1,25 @@
 import { Button, Container, Flex, Input, SimpleGrid } from '@chakra-ui/react';
-import { groupBy } from 'lodash';
-import { IssuesBystate, Status } from '@/types/issue';
+import { Status } from '@/types/issue';
 import Column from '@/components/Column';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useGithubIssues } from '@/hooks/useGithubIssues';
+import { useIssueStore } from '@/store/issues';
+import { normalizeIssues } from '@/utils/normalizeIssues';
 
 const IssuesBoard = () => {
   const [repoUrl, setRepoUrl] = useState('');
   const [currentRepo, setCurrentRepo] = useState('');
+  const { issues, setIssues } = useIssueStore();
 
   const {
-    data: issues,
+    data: fetchedIssues,
 
     refetch,
   } = useGithubIssues(currentRepo);
+
+  useEffect(() => {
+    if (fetchedIssues) setIssues(fetchedIssues);
+  }, [fetchedIssues, setIssues]);
 
   const handleLoadIssues = () => {
     console.log('handleLoadIssues');
@@ -21,13 +27,7 @@ const IssuesBoard = () => {
     refetch();
   };
 
-  const categorizedIssues: IssuesBystate = Object.fromEntries(
-    Object.values(Status).map((state) => [
-      state,
-      groupBy(issues || [], 'state')[state] ?? [],
-    ]),
-  ) as IssuesBystate;
-  console.log('IssuesBoard', { categorizedIssues });
+  const categorizedIssues = normalizeIssues(issues);
 
   return (
     <Container fluid py={8}>
