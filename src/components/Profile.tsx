@@ -1,10 +1,10 @@
 import { useRepoStore } from '@/store/repo';
-import { Breadcrumb, Flex } from '@chakra-ui/react';
+import { Breadcrumb, Flex, Text } from '@chakra-ui/react';
 import { Icon } from '@chakra-ui/react';
 import { HiStar } from 'react-icons/hi';
 
 const Profile = () => {
-  const { repoInfo, currentRepoUrl } = useRepoStore();
+  const { repoInfo } = useRepoStore();
   const ownerUrl = repoInfo?.url?.split('/').slice(0, 4).join('/');
   const repoUrl = repoInfo?.url;
   const owner = repoInfo?.owner;
@@ -16,12 +16,12 @@ const Profile = () => {
       : repoInfo.stars.toString()
     : '0';
 
-  if (!currentRepoUrl) {
+  if (!repoInfo?.url) {
     return null;
   }
 
   return (
-    <Flex align="center" p={4} gap={4}>
+    <Flex align="center" mb="4">
       <Breadcrumb.Root>
         <Breadcrumb.List>
           <Breadcrumb.Item>
@@ -39,10 +39,10 @@ const Profile = () => {
         </Breadcrumb.List>
       </Breadcrumb.Root>
       <Flex align="center" gap={2}>
-        <Icon fontSize="2xl" color="yellow.500">
+        <Icon fontSize="md" color="yellow.500">
           <HiStar />
         </Icon>
-        {stars}
+        <Text textStyle="sm">{stars}</Text>
       </Flex>
     </Flex>
   );

@@ -1,4 +1,6 @@
 import { Button, Flex, Input, Text } from '@chakra-ui/react';
+import { Toaster, toaster } from '@/components/ui/toaster';
+
 import { Field } from '@/components/ui/field';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -61,6 +63,10 @@ const InputForm = () => {
         owner,
         issues,
       });
+      toaster.create({
+        description: `Fetched ${issues.length} issues from ${repoName} of ${owner}`,
+        type: 'info',
+      });
     }
   };
 
@@ -71,7 +77,7 @@ const InputForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex gap={4} align="center">
+      <Flex gap={4} align="center" mb="4">
         <Field invalid={!!errors.repoUrl}>
           <Input
             {...register('repoUrl')}
@@ -91,6 +97,7 @@ const InputForm = () => {
         >
           I&apos;m lazy, find random repo
         </Button>
+        <Toaster />
       </Flex>
 
       {errors.repoUrl && <Text color="red.500">{errors.repoUrl.message}</Text>}

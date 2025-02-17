@@ -1,10 +1,14 @@
 import axios from 'axios';
+const GITHUB_TOKEN = import.meta.env.GITHUB_API_TOKEN || '';
 
 export const findRandomRepoWithIssues = async () => {
   try {
+    const headers =
+      GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {};
     const searchResponse = await axios.get(
       'https://api.github.com/search/repositories',
       {
+        headers,
         params: {
           q: 'stars:>100 issues:>1',
           sort: 'stars',
