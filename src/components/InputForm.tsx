@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { useIssuesStore } from '@/store/issues';
 import { fetchIssues } from '@/services/githubApi';
 import { useRepoStore } from '@/store/repo';
+import { findRandomRepoWithIssues } from '@/services/randomRepo';
 
 const repoSchema = z.object({
   repoUrl: z
@@ -22,7 +23,7 @@ type RepoFormData = z.infer<typeof repoSchema>;
 
 const InputForm = () => {
   const { setRepos, getIssues } = useIssuesStore();
-  const { savedRepoUrl, setRepoUrl } = useRepoStore();
+  const { setCurrentRepoUrl, repoInfo, setRepoInfo } = useRepoStore();
   const {
     register,
     handleSubmit,
@@ -32,8 +33,7 @@ const InputForm = () => {
   });
 
   const onSubmit = async ({ repoUrl }: RepoFormData) => {
-    setRepoUrl(repoUrl);
-
+    setCurrentRepoUrl(repoUrl);
     const owner = repoUrl.split('/')[3];
     const repoName = repoUrl.split('/')[4];
     const repoId = `${owner}/${repoName}`;
@@ -43,29 +43,53 @@ const InputForm = () => {
       return;
     }
 
-    const issues = await fetchIssues(owner, repoName);
+    const result = await fetchIssues(owner, repoName);
 
-    setRepos({
-      id: repoId,
-      name: repoName,
-      owner,
-      issues,
-    });
+    if (result) {
+      const { issues, repoInfo } = result;
+
+      setRepoInfo({
+        url: repoUrl,
+        name: repoInfo.name,
+        owner: repoInfo.owner,
+        stars: repoInfo.stars,
+      });
+
+      setRepos({
+        id: repoId,
+        name: repoName,
+        owner,
+        issues,
+      });
+    }
+  };
+
+  const randomRepoHandler = async () => {
+    const randomRepo = await findRandomRepoWithIssues();
+    onSubmit({ repoUrl: randomRepo?.html_url || '' });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex mb={4} gap={4} align="center">
+      <Flex gap={4} align="center">
         <Field invalid={!!errors.repoUrl}>
           <Input
             {...register('repoUrl')}
             placeholder="Enter GitHub repo URL"
-            defaultValue={savedRepoUrl || ''}
+            defaultValue={repoInfo?.url || ''}
             rounded="md"
           />
         </Field>
         <Button type="submit" bg="blue.600" loading={isSubmitting} rounded="md">
           Load Issues
+        </Button>
+        <Button
+          bg="teal.600"
+          loading={isSubmitting}
+          rounded="md"
+          onClick={randomRepoHandler}
+        >
+          I&apos;m lazy, find random repo
         </Button>
       </Flex>
 

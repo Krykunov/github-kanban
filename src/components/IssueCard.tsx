@@ -4,7 +4,7 @@ import { Issue } from '@/types/issue';
 
 const IssueCard = ({ issue }: { issue: Issue }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: issue.id,
+    id: issue.id.toString(),
   });
 
   const style =
