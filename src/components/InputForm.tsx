@@ -3,9 +3,9 @@ import { Field } from '@/components/ui/field';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useEffect, useCallback } from 'react';
-import { useGithubIssues } from '@/hooks/useGithubIssues';
-import { useIssueStore } from '@/store/issues';
+
+import { useIssuesStore } from '@/store/issues';
+import { fetchIssues } from '@/services/githubApi';
 import { useRepoStore } from '@/store/repo';
 
 const repoSchema = z.object({
@@ -13,7 +13,7 @@ const repoSchema = z.object({
     .string()
     .min(1, 'Repository URL is required')
     .regex(
-      /^https?:\/\/github\.com\/([^/]+)\/([^/]+)$/,
+      /^https:\/\/github\.com\/([^/]+)\/([^/]+)$/,
       'Invalid GitHub repository URL',
     ),
 });
@@ -21,31 +21,37 @@ const repoSchema = z.object({
 type RepoFormData = z.infer<typeof repoSchema>;
 
 const InputForm = () => {
-  const { repoUrl, setRepoUrl } = useRepoStore();
-  const { setIssues } = useIssueStore();
-
+  const { setRepos, getIssues } = useIssuesStore();
+  const { savedRepoUrl, setRepoUrl } = useRepoStore();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<RepoFormData>({
     resolver: zodResolver(repoSchema),
-    defaultValues: { repoUrl: repoUrl || '' },
   });
 
-  const { data: fetchedIssues, refetch } = useGithubIssues(repoUrl ?? '');
+  const onSubmit = async ({ repoUrl }: RepoFormData) => {
+    setRepoUrl(repoUrl);
 
-  const onSubmit = useCallback(
-    ({ repoUrl }: RepoFormData) => {
-      setRepoUrl(repoUrl);
-      refetch();
-    },
-    [refetch, setRepoUrl],
-  );
+    const owner = repoUrl.split('/')[3];
+    const repoName = repoUrl.split('/')[4];
+    const repoId = `${owner}/${repoName}`;
 
-  useEffect(() => {
-    if (fetchedIssues) setIssues(fetchedIssues);
-  }, [fetchedIssues, setIssues]);
+    const savedIssues = getIssues(repoId);
+    if (savedIssues) {
+      return;
+    }
+
+    const issues = await fetchIssues(owner, repoName);
+
+    setRepos({
+      id: repoId,
+      name: repoName,
+      owner,
+      issues,
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -54,6 +60,7 @@ const InputForm = () => {
           <Input
             {...register('repoUrl')}
             placeholder="Enter GitHub repo URL"
+            defaultValue={savedRepoUrl || ''}
             rounded="md"
           />
         </Field>

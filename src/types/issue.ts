@@ -3,15 +3,23 @@ export type Issue = {
   title: string;
   number: number;
   created_at: string;
-  user: { login: string };
+  user: string;
   comments: number;
-  state: Status;
+  state: 'open' | 'inProgress' | 'closed';
 };
 
+export type IssueWithAssignee = Partial<
+  Issue & {
+    assignee?: { login: string } | null;
+    assignees?: { login: string }[];
+    user: { login: string };
+  }
+>;
+
 export enum Status {
-  Open = 'open',
-  InProgress = 'In Progress',
-  Done = 'closed',
+  open = 'open',
+  inProgress = 'inProgress',
+  closed = 'closed',
 }
 
 export type IssuesByStatus = Record<Status, Issue[]>;
