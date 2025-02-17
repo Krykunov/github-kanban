@@ -2,15 +2,29 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface RepoStore {
-  savedRepoUrl: string | null;
-  setRepoUrl: (url: string) => void;
+  currentRepoUrl: string | null;
+  setCurrentRepoUrl: (url: string) => void;
+  repoInfo: {
+    url: string;
+    name: string;
+    owner: string;
+    stars: number;
+  } | null;
+  setRepoInfo: (info: {
+    url: string;
+    name: string;
+    owner: string;
+    stars: number;
+  }) => void;
 }
 
 export const useRepoStore = create<RepoStore>()(
   persist(
     (set) => ({
-      savedRepoUrl: null,
-      setRepoUrl: (url) => set({ savedRepoUrl: url }),
+      currentRepoUrl: null,
+      setCurrentRepoUrl: (url) => set({ currentRepoUrl: url }),
+      repoInfo: null,
+      setRepoInfo: (info) => set({ repoInfo: info }),
     }),
     {
       name: 'repo-storage',

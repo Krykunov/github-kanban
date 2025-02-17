@@ -1,10 +1,5 @@
 import { Container, SimpleGrid } from '@chakra-ui/react';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
 
 import { Status } from '@/types/issue';
 import Column from '@/components/Column';
@@ -12,12 +7,13 @@ import { groupIssues } from '@/utils/groupIssues';
 import InputForm from '@/components/InputForm';
 import { useIssuesStore } from '@/store/issues';
 import { useRepoStore } from '@/store/repo';
+import Profile from './Profile';
 
 const IssuesBoard = () => {
   const { getIssues, updateIssues } = useIssuesStore();
-  const { savedRepoUrl } = useRepoStore();
+  const { currentRepoUrl } = useRepoStore();
 
-  const repoId = savedRepoUrl?.split('/').slice(-2).join('/') || '';
+  const repoId = currentRepoUrl?.split('/').slice(-2).join('/') || '';
   const issues = getIssues(repoId) || [];
 
   const groupedIssues = groupIssues(issues);
@@ -38,23 +34,8 @@ const IssuesBoard = () => {
       );
       updateIssues(repoId, updatedIssues);
     } else {
-      const columnIssues = [...groupedIssues[newStatus]];
-      const oldIndex = columnIssues.findIndex((i) => i.id === issueId);
-      // console.log(oldIndex);
-      const newIndex = columnIssues.findIndex(
-        (i) => i.id.toString() === over.id.toString(),
-      );
-      console.log(over);
-
-      if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
-        const newOrder = arrayMove(columnIssues, oldIndex, newIndex);
-
-        const updatedIssues = issues.map(
-          (i) => newOrder.find((ni) => ni.id === i.id) || i,
-        );
-
-        updateIssues(repoId, updatedIssues);
-      }
+      // TODO: Handle reordering
+      return null;
     }
   };
 
@@ -62,15 +43,10 @@ const IssuesBoard = () => {
     <DndContext onDragEnd={handleDragEnd}>
       <Container maxW="container.lg" py={8}>
         <InputForm />
+        <Profile />
         <SimpleGrid columns={3} gap={4}>
           {Object.entries(groupedIssues).map(([state, issues]) => (
-            <SortableContext
-              key={state}
-              items={issues.map((i) => i.id.toString())}
-              strategy={verticalListSortingStrategy}
-            >
-              <Column state={state as Status} issues={issues} />
-            </SortableContext>
+            <Column key={state} state={state as Status} issues={issues} />
           ))}
         </SimpleGrid>
       </Container>

@@ -5,17 +5,31 @@ import { normalizeIssues } from '@/utils/normalizeIssues';
 export const fetchIssues = async (
   owner: string,
   repo: string,
-): Promise<Issue[]> => {
+): Promise<{
+  issues: Issue[];
+  repoInfo: { name: string; owner: string; stars: number };
+} | null> => {
   try {
-    const response = await axios.get(
-      `https://api.github.com/repos/${owner}/${repo}/issues`,
+    const issuesResponse = await axios.get(
+      `https://api.github.com/repos/${owner}/${repo}/issues?state=all&per_page=100`,
+    );
+    const repoResponse = await axios.get(
+      `https://api.github.com/repos/${owner}/${repo}`,
     );
 
-    return response.data.map((issue: IssueWithAssignee) => ({
+    const issues = issuesResponse.data.map((issue: IssueWithAssignee) => ({
       ...normalizeIssues(issue),
     }));
+
+    const repoInfo = {
+      name: repoResponse.data.name,
+      owner: repoResponse.data.owner.login,
+      stars: repoResponse.data.stargazers_count,
+    };
+
+    return { issues, repoInfo };
   } catch (error) {
     console.error('Failed to fetch issues:', error);
-    return [];
+    return null;
   }
 };
