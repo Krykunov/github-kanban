@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Text } from '@chakra-ui/react';
+import { Button, Flex, IconButton, Input, Text } from '@chakra-ui/react';
 import { Toaster, toaster } from '@/components/ui/toaster';
 
 import { Field } from '@/components/ui/field';
@@ -10,6 +10,7 @@ import { useIssuesStore } from '@/store/issues';
 import { fetchIssues } from '@/services/githubApi';
 import { useRepoStore } from '@/store/repo';
 import { findRandomRepoWithIssues } from '@/services/randomRepo';
+import { IoCloseOutline } from 'react-icons/io5';
 
 const repoSchema = z.object({
   repoUrl: z
@@ -75,6 +76,11 @@ const InputForm = () => {
     onSubmit({ repoUrl: randomRepo?.html_url || '' });
   };
 
+  const resetForm = () => {
+    setRepoInfo(null);
+    setCurrentRepoUrl(null);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex gap={4} align="center" mb="4">
@@ -86,6 +92,9 @@ const InputForm = () => {
             rounded="md"
           />
         </Field>
+        <IconButton bg="red.500" type="reset" rounded="md" onClick={resetForm}>
+          <IoCloseOutline />
+        </IconButton>
         <Button type="submit" bg="blue.600" loading={isSubmitting} rounded="md">
           Load Issues
         </Button>
