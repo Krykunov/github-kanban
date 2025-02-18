@@ -1,6 +1,6 @@
 import { Container } from '@chakra-ui/react';
-import IssuesBoard from './components/IssuesBoard';
 import './App.css';
+import IssuesBoard from './components/IssuesBoard';
 
 function App() {
   return (
