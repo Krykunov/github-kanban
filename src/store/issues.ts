@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Repo } from '@/types/repo';
-import { Issue } from '@/types/issue';
+import { IssuesByStatus } from '@/types/issue';
 
 interface RepoStore {
   repos: Repo[];
   setRepos: (newRepo: Repo) => void;
-  getIssues: (repoId: string) => Issue[] | null;
-  updateIssues: (repoId: string, updatedIssues: Issue[]) => void;
+  getIssues: (repoId: string) => IssuesByStatus | null;
+  updateIssues: (repoId: string, updatedIssues: IssuesByStatus) => void;
 }
 
 export const useIssuesStore = create<RepoStore>()(
@@ -37,7 +37,7 @@ export const useIssuesStore = create<RepoStore>()(
       },
     }),
     {
-      name: 'github-repos-storage',
+      name: 'repos-storage',
     },
   ),
 );

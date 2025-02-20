@@ -1,25 +1,20 @@
 import { Box, Text } from '@chakra-ui/react';
-import { useDraggable } from '@dnd-kit/core';
 import { Issue } from '@/types/issue';
+import { useSortable } from '@dnd-kit/react/sortable';
 
-const IssueCard = ({ issue }: { issue: Issue }) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: issue.id.toString(),
+const IssueCard = ({ issue, index }: { issue: Issue; index: number }) => {
+  const { ref, isDragging } = useSortable({
+    id: issue.id,
+    index: index,
+    type: 'item',
+    accept: 'item',
+    group: issue.state,
   });
-
-  const style =
-    transform ?
-      {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
 
   return (
     <Box
-      ref={setNodeRef}
-      style={style}
-      {...listeners}
-      {...attributes}
+      ref={ref}
+      data-dragging={isDragging}
       p={3}
       bg="blue.800"
       borderRadius="md"
@@ -29,6 +24,7 @@ const IssueCard = ({ issue }: { issue: Issue }) => {
       <Text fontSize="sm">
         #{issue.number} opened {new Date(issue.created_at).toDateString()}
       </Text>
+      <Text fontSize="md">{issue.id}</Text>
       <Text fontSize="sm">{issue.state}</Text>
       <Text fontSize="sm">
         {issue.user} | Comments: {issue.comments}

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Issue, IssueWithAssignee } from '@/types/issue';
 import { normalizeIssues } from '@/utils/normalizeIssues';
 
-const GITHUB_TOKEN = import.meta.env.GITHUB_API_TOKEN || '';
+const GITHUB_API_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN || '';
 
 export const fetchIssues = async (
   owner: string,
@@ -13,9 +13,9 @@ export const fetchIssues = async (
 } | null> => {
   try {
     const headers =
-      GITHUB_TOKEN ? { Authorization: `Bearer ${GITHUB_TOKEN}` } : {};
+      GITHUB_API_TOKEN ? { Authorization: `Bearer ${GITHUB_API_TOKEN}` } : {};
     const issuesResponse = await axios.get(
-      `https://api.github.com/repos/${owner}/${repo}/issues?state=all&per_page=100`,
+      `https://api.github.com/repos/${owner}/${repo}/issues?state=all&per_page=10`,
       { headers },
     );
     const repoResponse = await axios.get(
