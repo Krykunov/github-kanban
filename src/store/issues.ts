@@ -3,14 +3,14 @@ import { persist } from 'zustand/middleware';
 import { Repo } from '@/types/repo';
 import { IssuesByStatus } from '@/types/issue';
 
-interface RepoStore {
+export interface IssuesStore {
   repos: Repo[];
   setRepos: (newRepo: Repo) => void;
   getIssues: (repoId: string) => IssuesByStatus | null;
   updateIssues: (repoId: string, updatedIssues: IssuesByStatus) => void;
 }
 
-export const useIssuesStore = create<RepoStore>()(
+export const useIssuesStore = create<IssuesStore>()(
   persist(
     (set, get) => ({
       repos: [],
