@@ -13,6 +13,9 @@ const Column = ({ state, issues }: { state: Status; issues: Issue[] }) => {
     data: { state },
   });
 
+  const name = state.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
+  const capitalized = name.charAt(0).toUpperCase() + name.slice(1);
+
   return (
     <Box
       ref={ref}
@@ -21,7 +24,7 @@ const Column = ({ state, issues }: { state: Status; issues: Issue[] }) => {
       borderRadius="md"
     >
       <Heading size="md" mb={2} textAlign="center">
-        {state}
+        {capitalized}
       </Heading>
       <VStack align="stretch">
         {issues.length > 0 ?

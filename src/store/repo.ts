@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface RepoStore {
+export interface RepoStore {
   currentRepoUrl: string | null;
   currentRepoName: string | null;
   setCurrentRepoUrl: (url: string | null) => void;
