@@ -1,5 +1,5 @@
 import axios from 'axios';
-const GITHUB_TOKEN = import.meta.env.GITHUB_API_TOKEN || '';
+const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN || '';
 
 export const findRandomRepoWithIssues = async () => {
   try {
@@ -10,7 +10,7 @@ export const findRandomRepoWithIssues = async () => {
       {
         headers,
         params: {
-          q: 'stars:>100 issues:>1',
+          q: 'stars:>200 issues:>1',
           sort: 'stars',
           order: 'desc',
           per_page: 100,

@@ -3,7 +3,9 @@ import { persist } from 'zustand/middleware';
 
 interface RepoStore {
   currentRepoUrl: string | null;
+  currentRepoName: string | null;
   setCurrentRepoUrl: (url: string | null) => void;
+  setCurrentRepoName: (url: string | null) => void;
   repoInfo: {
     url: string;
     name: string;
@@ -24,12 +26,14 @@ export const useRepoStore = create<RepoStore>()(
   persist(
     (set) => ({
       currentRepoUrl: null,
+      currentRepoName: null,
+      setCurrentRepoName: (name) => set({ currentRepoName: name }),
       setCurrentRepoUrl: (url) => set({ currentRepoUrl: url }),
       repoInfo: null,
       setRepoInfo: (info) => set({ repoInfo: info }),
     }),
     {
-      name: 'repo-storage',
+      name: 'repoUrl-storage',
     },
   ),
 );
