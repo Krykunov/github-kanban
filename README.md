@@ -1,50 +1,64 @@
-# React + TypeScript + Vite
+# Github Kanban Board
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[Demo Link](https://github-kanban.netlify.app/)
 
-Currently, two official plugins are available:
+GitHub Kanban Board is a web application that allows users to visualize and manage GitHub repository issues in a Kanban-style board. Users can enter a GitHub repository URL, load issues, and organize them into three columns:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ToDo → New issues
+- In Progress → Open issues with an assignee
+- Closed → Closed issues
 
-## Expanding the ESLint configuration
+Users can drag and drop issues between columns, reorder them, and persist the board's state across sessions.Users can drag and drop issues between columns, reorder them, and persist the board's state across sessions.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 🚀 Features
 
-- Configure the top-level `parserOptions` property like this:
+- 🔍 Search GitHub repositories by URL
+- 🎲 Search random repository with issues
+- 🔑 Possibility to use personal Github token to increase rate limit
+- 📄 Load and display GitHub issues
+- 🏗 Drag and drop issues between columns
+- 🗂 Reorder issues within a column
+- 💾 Persist issue positions across sessions
+- 🔗 Visit repository and owner profile via links
+- 🎨 Modern UI with Chakra UI
+- 🏗 Maintainable modular codebase
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🛠 Technologies Used
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- React 19 with Vite and TypeScript
+- Chakra UI
+- DND Kit
+- Zustand
+- Tanstack Query
+- Axios
+- React Hook Form
+- Zod
+- Vitest & RTL
+- ESLint, Prettier, Husky, Github Actions
+- Deploy with Netlify
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## 🏗 Setup & Installation
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### 🔧 Prerequisites
+
+- Install Node.js (v18+ recommended)
+- Have a GitHub Personal Access Token (optional but improves API limits)
+
+### 🚀 Installation Steps
+
+#### Clone the repository
+
+`git clone https://github.com/Krykunov/github-kanban.git`
+`cd github-kanban`
+
+#### Install dependencies
+
+`npm install`
+
+##### Create an .env file in the root directory
+
+`"VITE_GITHUB_API_TOKEN=your_github_token" > .env`
+
+##### Start the development server
+
+`npm run dev`

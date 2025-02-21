@@ -35,7 +35,6 @@ export const useRepo = () => {
 
         const { issues, repoInfo } = result;
 
-        // Update store with fetched repo details
         setRepoInfo({
           url: repoUrl,
           name: repoInfo.name,
@@ -69,7 +68,6 @@ export const useRepo = () => {
   const onSubmit = useCallback(
     async ({ repoUrl }: RepoFormData) => {
       if (!repoUrl) return;
-      console.log('repoUrl', repoUrl);
 
       setCurrentRepoUrl(repoUrl);
       setValue(repoUrl);
