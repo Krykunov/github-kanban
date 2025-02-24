@@ -22,4 +22,11 @@ export enum Status {
   closed = 'closed',
 }
 
+export enum Notification {
+  success = 'success',
+  error = 'error',
+  warning = 'warning',
+  info = 'info',
+}
+
 export type IssuesByStatus = Record<Status, Issue[]>;

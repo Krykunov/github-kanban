@@ -9,12 +9,14 @@ const Profile = () => {
   const repoUrl = repoInfo?.url;
   const owner = repoInfo?.owner;
   const repo = repoInfo?.name;
-  const stars =
-    repoInfo?.stars ?
-      repoInfo.stars > 1000 ?
-        `${(repoInfo.stars / 1000).toFixed(1)} K`
-      : repoInfo.stars.toString()
-    : '0';
+  let stars = '0';
+  if (repoInfo?.stars) {
+    if (repoInfo.stars > 1000) {
+      stars = `${(repoInfo.stars / 1000).toFixed(1)} K`;
+    } else {
+      stars = repoInfo.stars.toString();
+    }
+  }
 
   if (!repoInfo?.url) {
     return null;

@@ -6,6 +6,7 @@ import { groupIssues } from '@/utils/groupIssues';
 import { findRandomRepoWithIssues } from '@/services/randomRepo';
 import { RepoFormData } from '@/components/InputForm';
 import { toaster } from '@/components/ui/toaster';
+import { Notification } from '@/types/issue';
 
 export const useRepo = () => {
   const { setRepos, getIssues } = useIssuesStore();
@@ -53,12 +54,12 @@ export const useRepo = () => {
 
         toaster.create({
           description: `Fetched ${issues.length} issues from ${repoName} of ${owner}`,
-          type: 'info',
+          type: Notification.info,
         });
       } catch (error) {
         toaster.create({
           description: (error as Error).message,
-          type: 'error',
+          type: Notification.error,
         });
       }
     },

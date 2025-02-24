@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { Issue, IssueWithAssignee } from '@/types/issue';
 import { normalizeIssues } from '@/utils/normalizeIssues';
-
-const GITHUB_API_TOKEN = import.meta.env.VITE_GITHUB_API_TOKEN || '';
+import { BASE_URL, GITHUB_API_TOKEN } from '@/constants';
 
 export const fetchIssues = async (
   owner: string,
@@ -15,13 +14,12 @@ export const fetchIssues = async (
     const headers =
       GITHUB_API_TOKEN ? { Authorization: `Bearer ${GITHUB_API_TOKEN}` } : {};
     const issuesResponse = await axios.get(
-      `https://api.github.com/repos/${owner}/${repo}/issues?state=all&per_page=10`,
+      `${BASE_URL}/repos/${owner}/${repo}/issues?state=all&per_page=10`,
       { headers },
     );
-    const repoResponse = await axios.get(
-      `https://api.github.com/repos/${owner}/${repo}`,
-      { headers },
-    );
+    const repoResponse = await axios.get(`${BASE_URL}/repos/${owner}/${repo}`, {
+      headers,
+    });
 
     const issues = issuesResponse.data.map((issue: IssueWithAssignee) => ({
       ...normalizeIssues(issue),
